@@ -30,49 +30,61 @@ ui <- fluidPage(
       # Use tabPanel directly within tabsetPanel
   #  ),
     #mainPanel(
-      tabsetPanel(
-        id = "tabs",
-        tabPanel("Number of Death by Region",
-          tabsetPanel(type = "tab",
-            id = "yearTabs",
-            tabPanel("1970", value = "1970"),
-            tabPanel("1980", value = "1980"),
-            tabPanel("1990", value = "1990"),
-            tabPanel("2000", value = "2000"),
-            tabPanel("2010", value = "2010")
-          ),
-          plotOutput("yearPlot")
-        ),
-      ),
-      plotOutput("totaldeathLineChart"),
-      tabsetPanel(
-        id = "tabs",
-        tabPanel("Global Death by Age Group and Gender",
-          tabsetPanel(type = "tab",
-            id = "yearTabs1",
-            tabPanel("1970", value = "1970"),
-            tabPanel("1980", value = "1980"),
-            tabPanel("1990", value = "1990"),
-            tabPanel("2000", value = "2000"),
-            tabPanel("2010", value = "2010")
-          ),
-          plotOutput("AgeGenderDeath")
-        )
-      ),
-      tabsetPanel(
-        id = "tabs",
-        tabPanel("Global Death Rate by Country",
-          tabsetPanel(type = "tab",
-            id = "yearTabs2",
-            tabPanel("1970", value = "1970"),
-            tabPanel("1980", value = "1980"),
-            tabPanel("1990", value = "1990"),
-            tabPanel("2000", value = "2000"),
-            tabPanel("2010", value = "2010")
-          ),
-          plotOutput("DeathRate")
-        )
-      )
+  fluidRow(
+    column(6,
+           tabsetPanel(
+             id = "tabs",
+             tabPanel("Number of Death by Region",
+                      tabsetPanel(type = "tab",
+                                  id = "yearTabs",
+                                  tabPanel("1970", value = "1970"),
+                                  tabPanel("1980", value = "1980"),
+                                  tabPanel("1990", value = "1990"),
+                                  tabPanel("2000", value = "2000"),
+                                  tabPanel("2010", value = "2010")
+                      ),
+                      plotOutput("yearPlot")
+             )
+           )
+    ),
+    column(6,
+           plotOutput("totaldeathLineChart")
+    )
+  ),
+  fluidRow(
+    column(6,
+           tabsetPanel(
+             id = "tabs",
+             tabPanel("Global Death by Age Group and Gender",
+                      tabsetPanel(type = "tab",
+                                  id = "yearTabs1",
+                                  tabPanel("1970", value = "1970"),
+                                  tabPanel("1980", value = "1980"),
+                                  tabPanel("1990", value = "1990"),
+                                  tabPanel("2000", value = "2000"),
+                                  tabPanel("2010", value = "2010")
+                      ),
+                      plotOutput("AgeGenderDeath")
+             )
+           )
+    ),
+    column(6,
+           tabsetPanel(
+             id = "tabs",
+             tabPanel("Global Death Rate by Country",
+                      tabsetPanel(type = "tab",
+                                  id = "yearTabs2",
+                                  tabPanel("1970", value = "1970"),
+                                  tabPanel("1980", value = "1980"),
+                                  tabPanel("1990", value = "1990"),
+                                  tabPanel("2000", value = "2000"),
+                                  tabPanel("2010", value = "2010")
+                      ),
+                      plotOutput("DeathRate")
+             )
+           )
+    )
+  )
     #)
 )
 
