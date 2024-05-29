@@ -4,6 +4,7 @@ library(dplyr)
 library(readxl)
 library(maps)
 library(scales)
+library(plotly)
 #library(showtext)
 #font_add_google("Open Sans", "Open Sans")
 
@@ -50,7 +51,7 @@ ui <- fluidPage(
                                    tabPanel("2000", value = "2000"),
                                    tabPanel("2010", value = "2010")
                        ),
-                       plotOutput("AgeGenderDeath")
+                       plotlyOutput("AgeGenderDeath")
               )
             )
      )
@@ -68,7 +69,7 @@ ui <- fluidPage(
                                   tabPanel("2000", value = "2000"),
                                   tabPanel("2010", value = "2010")
                       ),
-                      plotOutput("yearPlot")
+                      plotlyOutput("yearPlot")
              )
            )
     ),

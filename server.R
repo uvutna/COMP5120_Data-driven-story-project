@@ -7,6 +7,7 @@ library(scales)
 library(emojifont)
 library(emoGG)
 library(gganimate)
+library(plotly)
 #library(showtext)
 #font_add_google("Open Sans", "Open Sans")
 
@@ -32,19 +33,20 @@ data3 <- data |> filter(age_name != "All ages"& age_name != "0-6 days"& age_name
 
 # Define the server logic
 server <- function(input, output) {
-  output$yearPlot <- renderPlot({
+  output$yearPlot <- renderPlotly({
     Year <- input$yearTabs
     yearData <- data1 |> filter(year == Year)
-    # Generate bar chart (same as before)
-    ggplot(yearData, aes(x = region_name, y = death_rate)) +
+    q <- ggplot(yearData, aes(x = region_name, y = death_rate)) +
       geom_bar(stat = "identity", fill = "steelblue") +
       labs(title = paste0("Death Rate per 100K by Region (", Year, ")"), x = "Region", y = "Death Rate")+
       theme_minimal(base_family = main_font,
                     base_size = 13)+
-      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))+
+      ylim(0,1875)
+    ggplotly(q, tooltip = "y")
   })
+  
   output$totaldeathLineChart <- renderPlot({
-    # Generate line chart showing the growth of USA's GDP
     ggplot(data2, aes(x = year, y = death_abs)) +
       geom_line(color = "blue") +
       geom_text(aes(label = fontawesome('fa-globe')), family='fontawesome-webfont', size=5)+
@@ -53,15 +55,16 @@ server <- function(input, output) {
         base_family = main_font,
         base_size = 13
       )
+    
   })
-  output$AgeGenderDeath <- renderPlot({
+  output$AgeGenderDeath <- renderPlotly({
     Year1 <- input$yearTabs1
     yearData1 <- data3 |> filter(year == Year1)
-    data_long <- yearData1 |> mutate( death_abs = ifelse(sex_name=="Male", death_abs*(-1), death_abs*1))
+    data_long <- yearData1 |> mutate( death_abs = ifelse(sex_name=="Male", death_abs*(-1)/1000, death_abs*1/1000))
     male_death <- data_long |> filter(sex_name == 'Male')
     female_death <- data_long |> filter(sex_name == 'Female')
     
-    ggplot(data_long, aes(x = 0,y = age_name)) +  
+    p <- ggplot(data_long, aes(x = 0,y = age_name)) +  
       geom_col(data=male_death, aes(y = age_name, x = death_abs,fill = "Male"))+
       geom_col(data=female_death,aes(y = age_name, x = death_abs,fill = "Female"))+
       scale_fill_manual(values = c("#109466","#112e80"))+
@@ -90,6 +93,7 @@ server <- function(input, output) {
         x = "Number of Death",
         fill="Gender"
       )
+    ggplotly(p, tooltip = "x")
   })
   
   output$DeathRate <- renderPlot({
@@ -112,8 +116,14 @@ server <- function(input, output) {
       geom_map(map = world_map, aes(map_id = Country_Name, fill = Death_Rate), size = 0.25) +
       scale_fill_gradient(low = "#fff7bc", high = "#cc4c02", name = "Death Rate per 100K") +
       expand_limits(x = world_map$long, y = world_map$lat)+
+      theme(
+        axis.text.x = element_blank(), 
+        axis.text.y = element_blank()
+      )+
       labs(
-        title = paste0("Global Death Rate by Country (", Year2, ")")
+        title = paste0("Global Death Rate by Country (", Year2, ")"),
+        x = NULL,
+        y = NULL
       )
   })
 }
